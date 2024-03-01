@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: express-mongo
+  name: express-mongo
+  namespace: mongodb
+spec:
+  type: NodePort
+  ports:
+  - port: 8081
+    protocol: TCP
+    targetPort: 8081 
+    nodePort: 30000
+    name: http
+  selector:
+    app: express-mongo

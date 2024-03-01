@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: mongodb
+  labels:
+    app: mongodb
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+  serviceName: db-service
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: mongodb 
+    spec:
+      containers:
+      - name: mongo
+        image: mongo
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+              secretKeyRef:
+                name: db-auth
+                key: username
+        - name:  MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+             secretKeyRef:
+                name: db-auth
+                key: password
+        ports:
+        - containerPort: 27017
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - name: mongodb-volume
+          mountPath: /data/db
+  volumeClaimTemplates:
+          - metadata:
+                name: mongodb-volume
+                labels:
+                  app: mongodb
+            spec:
+              selector:
+                  matchLabels:
+                    app: mongodb
+              accessModes: 
+                 -   ReadWriteMany
+                 -   ReadWriteOnce
+              resources:
+                requests:
+                   storage: 2Gi
+              storageClassName: standard
