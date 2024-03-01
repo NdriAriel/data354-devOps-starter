@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: express-mongodb-ingress
+  labels:
+    name: express-mongodb-ingress
+  namespace: mongodb
+  annotations:
+     nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: express-mongo.data354.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: express-mongo
+            port: 
+              name: http
+

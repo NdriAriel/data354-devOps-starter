@@ -1,1 +1,1 @@
-kubectl apply -f src/statefulsets -f src/deployments 
+kubectl apply -f src/secrets -f src/config-maps -f src/services -f src/ingress -f src/statefulsets -f src/deployments 
